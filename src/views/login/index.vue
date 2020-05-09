@@ -32,19 +32,35 @@
       </van-field>
     </van-cell-group>
     <div class="login-btn-wrap">
-      <van-button class="login-btn" type="primary" block>登录</van-button>
+      <van-button
+        class="login-btn"
+        type="primary"
+        block
+        @click="onLogin"
+      >登录</van-button>
     </div>
   </div>
 </template>
 
 <script>
+import { login } from '@/api/user'
 export default {
   name: 'LoginIndex',
   data () {
     return {
       user: {
-        mobile: '', // 手机号
-        code: '' // 短信验证码
+        mobile: '13911111111', // 手机号
+        code: '246810' // 短信验证码
+      }
+    }
+  },
+  methods: {
+    async onLogin () {
+      try {
+        const res = await login(this.user)
+        console.log(res)
+      } catch (err) {
+        console.log('登录失败', err)
       }
     }
   }
