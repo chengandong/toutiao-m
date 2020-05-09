@@ -8,10 +8,15 @@ import Vant from 'vant'
 // 导入 Vant 组件库 样式
 import 'vant/lib/index.css'
 
+// 用于设置 rem 基准值
+import 'amfe-flexible'
+
+// 全局注册
 Vue.use(Vant)
 
 Vue.config.productionTip = false
 
+// 创建 Vue根实例
 new Vue({
   router,
   store,
