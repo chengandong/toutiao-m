@@ -7,6 +7,9 @@
     <van-button type="warning">警告按钮</van-button>
     <van-button type="danger">危险按钮</van-button>
     <div class="box"></div>
+    <i class="toutiao toutiao-shipin"></i>
+    <i class="toutiao toutiao-wuwangluo"></i>
+    <van-button icon-prefix="toutiao" icon="wode" type="primary">按钮</van-button>
     <!-- 路由出口 -->
     <router-view/>
   </div>
