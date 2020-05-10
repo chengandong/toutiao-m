@@ -12,6 +12,7 @@
       :show-error="false"
       :show-error-message="false"
       validate-first
+      ref="login-form"
       @submit="onLogin"
       @failed="onFailed"
     >
@@ -20,6 +21,7 @@
         icon-prefix="toutiao"
         left-icon="shouji"
         name="mobile"
+        center
         placeholder="请输入手机号"
         :rules="formRules.mobile"
       />
@@ -28,15 +30,25 @@
         clearable
         icon-prefix="toutiao"
         left-icon="yanzhengma"
+        center
         name="code"
         placeholder="请输入验证码"
         :rules="formRules.code"
       >
         <template #button>
+          <van-count-down
+            :time="time"
+            format="ss s"
+            v-if="isShow"
+            @finish="isShow = false"
+          />
           <van-button
+            v-else
             class="send-btn"
             size="small"
             round
+            :loading="isSendSmsLoading"
+            @click.prevent="onSendSms"
           >发送验证码</van-button>
         </template>
       </van-field>
@@ -53,7 +65,7 @@
 </template>
 
 <script>
-import { login } from '@/api/user'
+import { login, sendSms } from '@/api/user'
 // 引入 Toast
 // import { Toast } from 'vant'
 export default {
@@ -61,8 +73,8 @@ export default {
   data () {
     return {
       user: {
-        mobile: '', // 手机号13911111111
-        code: '' // 短信验证码246810
+        mobile: '13911111111', // 手机号
+        code: '246810' // 短信验证码
       },
       formRules: {
         mobile: [
@@ -73,10 +85,14 @@ export default {
           { required: true, message: '请输入验证码' },
           { pattern: /^\d{6}$/, message: '验证码格式错误' }
         ]
-      }
+      },
+      time: 60 * 1000, // 倒计时总时长，单位为毫秒
+      isShow: false, // 控制 发送按钮和 倒计时 是否显示
+      isSendSmsLoading: false // 发送验证码按钮的 loading 状态
     }
   },
   methods: {
+    // 用户认证 (登录注册)
     async onLogin () {
       this.$toast.loading({
         message: '登录中...',
@@ -103,6 +119,37 @@ export default {
           position: top // 防止 用户手机输入键盘 阻挡 提示信息
         })
       }
+    },
+    async onSendSms () {
+      try {
+        // 验证表单，支持传入name来验证单个表单项
+        await this.$refs['login-form'].validate('mobile') // 返回值 Promise
+        // 开启 发送 验证码 loding 状态 (防止用户因 网络慢,而频繁点击 发送请求)
+        this.isSendSmsLoading = true
+        // 发送 验证码
+        await sendSms(this.user.mobile)
+        // 验证码 发送成功 隐藏发送按钮
+        this.isShow = true
+      } catch (err) {
+        // 定义 提示信息
+        let message = ''
+        if (err && err.response && err.response.status === 429) {
+          // 发送短信 太频繁 提示
+          message = '验证码发送太频繁,请稍后重试'
+        } else if (err.name === 'mobile') {
+          // 表单 验证失败 提示信息
+          message = '请输入手机号'
+        } else {
+          message = '发送失败,请稍后重试'
+        }
+        // 文字提示
+        this.$toast({
+          message: message,
+          position: top // 防止 用户手机输入键盘 阻挡 提示信息
+        })
+      }
+      // 关闭 发送 验证码 loding 状态
+      this.isSendSmsLoading = false
     }
   }
 }
