@@ -3,9 +3,6 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 
-// 导入 全局样式
-import './styles/index.less'
-
 // 导入 Vant 组件库
 import Vant from 'vant'
 // 导入 Vant 组件库 样式
@@ -13,6 +10,9 @@ import 'vant/lib/index.css'
 
 // 用于设置 rem 基准值
 import 'amfe-flexible'
+
+// 导入 全局样式
+import './styles/index.less'
 
 // 全局注册
 Vue.use(Vant)
