@@ -61,6 +61,11 @@
       >登录</van-button>
     </div>
     </van-form>
+    <!-- 服务提示 -->
+    <van-divider>账号：13911111111 密码：246810</van-divider>
+    <van-divider>如果收不到验证码，请使用万能验证码：246810</van-divider>
+    <!-- 同意条款 -->
+    <div class="privacy">隐私条款</div>
   </div>
 </template>
 
@@ -177,5 +182,12 @@ export default {
       }
     }
   }
+}
+.privacy {
+  position: absolute;
+  bottom: 27px;
+  left: 160px;
+  font-size: 12px;
+  color: #666;
 }
 </style>
