@@ -12,9 +12,9 @@
           slot="icon"
           round
           fit="cover"
-          src="https://img.yzcdn.cn/vant/cat.jpeg"
+          :src="userInfo.photo"
         />
-        <div slot="title" class="user-nickName">昵称</div>
+        <div slot="title" class="user-nickName">{{userInfo.name}}</div>
         <van-button
           type="default"
           round
@@ -30,25 +30,25 @@
       >
         <van-grid-item class="data-info-item">
           <div slot="text" class="text-wrap">
-            <div class="count">123</div>
+            <div class="count">{{userInfo.art_count}}</div>
             <div class="text">头条</div>
           </div>
         </van-grid-item>
         <van-grid-item class="data-info-item">
           <div slot="text" class="text-wrap">
-            <div class="count">123</div>
+            <div class="count">{{userInfo.follow_count}}</div>
             <div class="text">关注</div>
           </div>
         </van-grid-item>
         <van-grid-item class="data-info-item">
           <div slot="text" class="text-wrap">
-            <div class="count">123</div>
+            <div class="count">{{userInfo.fans_count}}</div>
             <div class="text">粉丝</div>
           </div>
         </van-grid-item>
         <van-grid-item class="data-info-item">
           <div slot="text" class="text-wrap">
-            <div class="count">123</div>
+            <div class="count">{{userInfo.like_count}}</div>
             <div class="text">获赞</div>
           </div>
         </van-grid-item>
@@ -90,12 +90,22 @@
 
 <script>
 import { mapState } from 'vuex'
+import { getUserInfo } from '@/api/user'
 export default {
   name: 'MyIndex',
+  data () {
+    return {
+      userInfo: {} // 用户信息
+    }
+  },
   computed: {
     ...mapState(['user'])
   },
+  created () {
+    this.loadUserInfo()
+  },
   methods: {
+    // 用户 退出
     onLoginOut () {
       // Dialog 弹出框
       this.$dialog.confirm({
@@ -109,6 +119,11 @@ export default {
         .catch(() => {
           // on cancel
         })
+    },
+    // 获取用户自己信息
+    async loadUserInfo () {
+      const { data } = await getUserInfo()
+      this.userInfo = data.data
     }
   }
 }
