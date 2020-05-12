@@ -4,8 +4,6 @@
       <!-- 个人 信息 头部 -->
       <van-cell
         center
-        title="单元格"
-        value="内容"
         :border="false"
         class="user-info"
       >
@@ -16,11 +14,12 @@
           fit="cover"
           src="https://img.yzcdn.cn/vant/cat.jpeg"
         />
-        <div slot="title">昵称</div>
+        <div slot="title" class="user-nickName">昵称</div>
         <van-button
           type="default"
           round
           size="mini"
+          class="editBtn"
         >编辑资料</van-button>
       </van-cell>
       <!-- 个人 信息 数据栏 -->
@@ -29,26 +28,26 @@
         center
         :border="false"
       >
-        <van-grid-item>
-          <div slot="text">
+        <van-grid-item class="data-info-item">
+          <div slot="text" class="text-wrap">
             <div class="count">123</div>
             <div class="text">头条</div>
           </div>
         </van-grid-item>
-        <van-grid-item>
-          <div slot="text">
+        <van-grid-item class="data-info-item">
+          <div slot="text" class="text-wrap">
             <div class="count">123</div>
             <div class="text">关注</div>
           </div>
         </van-grid-item>
-        <van-grid-item>
-          <div slot="text">
+        <van-grid-item class="data-info-item">
+          <div slot="text" class="text-wrap">
             <div class="count">123</div>
             <div class="text">粉丝</div>
           </div>
         </van-grid-item>
-        <van-grid-item>
-          <div slot="text">
+        <van-grid-item class="data-info-item">
+          <div slot="text" class="text-wrap">
             <div class="count">123</div>
             <div class="text">获赞</div>
           </div>
@@ -56,23 +55,23 @@
       </van-grid>
     </van-cell-group>
     <!-- Grid 宫格 页面导航 -->
-    <van-grid :column-num="2" class="">
+    <van-grid :column-num="2" class="nav-grid mb-5">
       <van-grid-item
-        class="shoucang"
+        class="nav-grid-item"
         icon-prefix="toutiao"
         icon="shoucang"
         text="收藏"
       />
       <van-grid-item
-        class="lishi"
+        class="nav-grid-item"
         icon-prefix="toutiao"
         icon="lishi"
         text="历史"
       />
     </van-grid>
     <!-- 页面导航 -->
-    <van-cell title="消息通知" is-link to="/" />
-    <van-cell title="小程同学" is-link to="/" />
+    <van-cell title="消息通知" is-link to="/" class="message" />
+    <van-cell title="小程同学" is-link to="/" class="mb-5 smartXC" />
     <van-cell title="退出登录" class="login_out"/>
   </div>
 </template>
@@ -88,42 +87,92 @@ export default {
   background: url('./banner.png') no-repeat;
   background-size: cover;
   box-sizing: border-box;
-  // color: #fff;
-  font-size: 15px;
-  padding: 46px 16px 14px;
+  color: #fff;
   .user-info {
-    background: none;
+    height: 116px;
+    background: unset;
+    padding-top: 38px;
+    padding-bottom: 11px;
     .user-avatar {
       width: 66px;
       height: 66px;
       padding: 2px;
+      box-sizing: border-box;
       margin-right: 12px;
       background-color: #fff;
     }
+    .user-nickName {
+      font-size: 15px;
+      color: #fff;
+    }
+    .editBtn {
+      height: 16px;
+      line-height: 16px;
+      font-size: 10px;
+      color: #666;
+    }
   }
   .data-info {
-    text-align: center;
-    .van-grid-item__content {
-      background: none;
+    .data-info-item {
+      height: 66px;
+      /deep/ .van-grid-item__content {
+      background: unset;
+      .text-wrap {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        .count {
+          font-size: 18px;
+        }
+        .text {
+          font-size: 12px;
+        }
+      }
     }
-    .count {
-      font-size: 18px;
-    }
-    .text {
-      font-size: 12px;
     }
   }
 }
-.shoucang {
-  font-size: 22px;
-  color: #eb5253;
+.nav-grid {
+  /deep/ .nav-grid-item {
+    height: 70px;
+    .toutiao {
+      font-size: 23px;
+    }
+    .van-grid-item__text {
+      font-size: 14px;
+      color: #333;
+    }
+    .toutiao-shoucang {
+      color: #eb5253;
+    }
+    .toutiao-lishi {
+      color: #ff9f21;
+    }
+  }
 }
-.lishi {
-  color: #ff9f21;
+.message {
+  height: 50px;
+}
+.smartXC {
+  height: 50px;
+}
+.van-cell__title {
+  display: flex;
+  align-items: center;
+  font-size: 15px;
+  color: #333;
 }
 .login_out {
-  text-align: center;
+  height: 52px;
+}
+.login_out .van-cell__title {
+  display: flex;
+  justify-content: center;
   color: #d86262;
   font-size: 15px;
+}
+.mb-5 {
+  margin-bottom: 5px;
 }
 </style>
