@@ -1,6 +1,6 @@
 <template>
   <div class="my-container">
-    <van-cell-group class="user-info-wrap">
+    <van-cell-group class="user-info-wrap" v-if="user">
       <!-- 个人 信息 头部 -->
       <van-cell
         center
@@ -54,6 +54,13 @@
         </van-grid-item>
       </van-grid>
     </van-cell-group>
+    <!-- 未登录 -->
+    <div class="no-login" v-else>
+      <div @click="$router.push('/login')">
+        <img class="cellphone" src="./cellphone.png">
+      </div>
+      <div class="text">登录 / 注册</div>
+    </div>
     <!-- Grid 宫格 页面导航 -->
     <van-grid :column-num="2" class="nav-grid mb-5">
       <van-grid-item
@@ -72,13 +79,38 @@
     <!-- 页面导航 -->
     <van-cell title="消息通知" is-link to="/" class="message" />
     <van-cell title="小程同学" is-link to="/" class="mb-5 smartXC" />
-    <van-cell title="退出登录" class="login_out"/>
+    <van-cell
+      v-if="user"
+      title="退出登录"
+      class="login_out"
+      @click="onLoginOut"
+    />
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
-  name: 'MyIndex'
+  name: 'MyIndex',
+  computed: {
+    ...mapState(['user'])
+  },
+  methods: {
+    onLoginOut () {
+      // Dialog 弹出框
+      this.$dialog.confirm({
+        title: '退出提示',
+        message: '亲,确定要退出当前账号嘛？'
+      })
+        .then(() => {
+          // 清除 用户 登录状态
+          this.$store.commit('setUser', null)
+        })
+        .catch(() => {
+          // on cancel
+        })
+    }
+  }
 }
 </script>
 
@@ -133,6 +165,7 @@ export default {
     }
   }
 }
+
 .nav-grid {
   /deep/ .nav-grid-item {
     height: 70px;
@@ -149,6 +182,25 @@ export default {
     .toutiao-lishi {
       color: #ff9f21;
     }
+  }
+}
+
+.no-login {
+  height: 180px;
+  background: url('./banner.png');
+  background-size: cover;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  .cellphone {
+    width: 66px;
+    height: 66px;
+    margin-bottom: 8px;
+  }
+  .text {
+    font-size: 14px;
+    color: #fff;
   }
 }
 .message {
