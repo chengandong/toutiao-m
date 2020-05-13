@@ -14,6 +14,9 @@ import 'amfe-flexible'
 // 导入 全局样式
 import './styles/index.less'
 
+// 导入 处理时间的
+import './utils/dayjs'
+
 // 全局注册
 Vue.use(Vant)
 

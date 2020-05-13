@@ -22,7 +22,7 @@
       <div class="lable-wrap">
         <span>{{ article.aut_name }}</span>
         <span>{{ article.comm_count }}评论</span>
-        <span>{{ article.pubdate }}</span>
+        <span>{{ article.pubdate | relativeTime }}</span>
       </div>
     </div>
     <!-- 自定义右侧内容 default默认插槽 -->
