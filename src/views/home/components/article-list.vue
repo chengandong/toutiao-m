@@ -12,7 +12,12 @@
         finished-text="没有更多了"
         @load="onLoad"
       >
-        <van-cell v-for="article in articles" :key="article.id" :title="article.title" />
+        <!-- 子组件 -->
+        <article-item
+          v-for="(article, index) in articles"
+          :key="index"
+          :article="article"
+        />
       </van-list>
     </van-pull-refresh>
   </div>
@@ -20,6 +25,7 @@
 
 <script>
 import { getArticles } from '@/api/article'
+import ArticleItem from '@/components/article-item/'
 export default {
   name: 'ArticleList',
   data () {
@@ -31,6 +37,9 @@ export default {
       isRefreshLoading: false, // 是否处于加载中状态
       SuccessText: '' // 刷新成功提示文案
     }
+  },
+  components: {
+    ArticleItem
   },
   props: {
     channel: {
