@@ -15,6 +15,7 @@
           <van-image
             class="cover-img"
             :src="img"
+            fit="cover"
           />
         </div>
       </div>
@@ -63,9 +64,10 @@ export default {
 }
 .cover-wrap {
   display: flex;
-  padding: 15px 0;
+  padding-top: 15px;
   .cover-item {
     flex: 1;
+    width: 116px;
     height: 73px;
     &:not(:last-child) {
         padding-right: 2px;
@@ -74,6 +76,14 @@ export default {
       width: 116px;
       height: 73px;
     }
+  }
+}
+.lable-wrap {
+  font-size: 12px;
+  color: #b4b4b4;
+  margin-top: 15px;
+  span {
+    margin-right: 12px;
   }
 }
 </style>
