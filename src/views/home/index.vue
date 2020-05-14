@@ -43,13 +43,17 @@
       get-container="body"
       :overlay="false"
       :style="{ height: '100%' }"
-    />
+    >
+      <!-- 频道编辑 子路由出口 -->
+      <channel-edit />
+    </van-popup>
   </div>
 </template>
 
 <script>
 import { getUserChannels } from '@/api/user'
 import ArticleList from './components/article-list'
+import ChannelEdit from './components/channel-edit'
 export default {
   name: 'HomeIndex',
   data () {
@@ -60,7 +64,8 @@ export default {
     }
   },
   components: {
-    ArticleList
+    ArticleList,
+    ChannelEdit
   },
   created () {
     this.loadChannels()
