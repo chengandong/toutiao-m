@@ -14,10 +14,10 @@
     <van-grid :gutter="10" class="grid-wrap">
       <van-grid-item
         class="grid-item"
-        v-for="value in 8"
+        v-for="(channel, index) in userChannels"
         center
-        :key="value"
-        text="文字"
+        :key="index"
+        :text="channel.name"
       />
     </van-grid>
     <!-- 频道推荐 -->
@@ -27,19 +27,71 @@
     <van-grid :gutter="10" class="grid-wrap">
       <van-grid-item
         class="grid-item"
-        v-for="value in 8"
-        :key="value"
+        v-for="(Channel, inndex) in recommendChannels"
+        :key="inndex"
         center
         icon="plus"
-        text="文字"
+        :text="Channel.name"
       />
     </van-grid>
   </div>
 </template>
 
 <script>
+import { getAllChannels } from '@/api/channel'
 export default {
-  name: 'ChannelEdit'
+  name: 'ChannelEdit',
+  data () {
+    return {
+      allChannels: [] // 全部频道列表数据
+    }
+  },
+  props: {
+    userChannels: {
+      type: Array,
+      required: true
+    }
+  },
+  computed: {
+    // 推荐频道 数据列表
+    recommendChannels () {
+      // filter()方法创建一个新数组,通过所提供函数实现的测试的所有元素
+      return this.allChannels.filter(channel => {
+        // 根据方法返回的布尔值 true 来判断数据
+        // find 方法查找满足条件的单个元素
+        return !this.userChannels.find(userChannel => {
+          // 判断
+          return channel.id === userChannel.id
+        })
+      })
+
+      // 方法二
+      // const arr = []
+      // this.allChannels.forEach(channel => {
+      //   let flag = false
+      //   for (let i = 0; i < this.userChannels.length; i++) {
+      //     if (this.userChannels[i].id === channel.id) {
+      //       flag = true
+      //       break
+      //     }
+      //   }
+      //   if (!flag) {
+      //     arr.push(channel)
+      //   }
+      // })
+      // return arr
+    }
+  },
+  created () {
+    this.loadAllChannels()
+  },
+  methods: {
+    // 全部频道列表
+    async loadAllChannels () {
+      const { data } = await getAllChannels()
+      this.allChannels = data.data.channels
+    }
+  }
 }
 </script>
 

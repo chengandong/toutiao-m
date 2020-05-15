@@ -45,7 +45,9 @@
       :style="{ height: '100%' }"
     >
       <!-- 频道编辑 子路由出口 -->
-      <channel-edit />
+      <channel-edit
+        :user-channels="channels"
+      />
     </van-popup>
   </div>
 </template>
