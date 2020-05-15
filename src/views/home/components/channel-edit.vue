@@ -9,13 +9,15 @@
         plain
         round
         size="mini"
-      >编辑</van-button>
+        @click="isEdit = !isEdit"
+      >{{isEdit ? '编辑' : '完成'}}</van-button>
     </van-cell>
     <van-grid :gutter="10" class="grid-wrap">
       <van-grid-item
         class="grid-item"
         v-for="(channel, index) in userChannels"
         center
+        :icon="isEdit ? 'close' : ''"
         :key="index"
         :text="channel.name"
       />
@@ -32,6 +34,7 @@
         center
         icon="plus"
         :text="Channel.name"
+        @click="onAddChannel(Channel)"
       />
     </van-grid>
   </div>
@@ -43,7 +46,8 @@ export default {
   name: 'ChannelEdit',
   data () {
     return {
-      allChannels: [] // 全部频道列表数据
+      allChannels: [], // 全部频道列表数据
+      isEdit: false // 是否为编辑状态
     }
   },
   props: {
@@ -52,6 +56,7 @@ export default {
       required: true
     }
   },
+  // 计算属性里面的数据 会根据数据的变化而重新求值
   computed: {
     // 推荐频道 数据列表
     recommendChannels () {
@@ -90,6 +95,11 @@ export default {
     async loadAllChannels () {
       const { data } = await getAllChannels()
       this.allChannels = data.data.channels
+    },
+    onAddChannel (Channel) {
+      this.userChannels.push(Channel)
+
+      // 数据持久化
     }
   }
 }
@@ -124,6 +134,12 @@ export default {
           position: absolute;
           left: 6px;
           font-size: 16px;
+        }
+        .van-icon-close {
+          position: absolute;
+          right: -5px;
+          top: -5px;
+          font-size: 14px;
         }
       }
     }
