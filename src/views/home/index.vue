@@ -59,6 +59,8 @@
 import { getUserChannels } from '@/api/user'
 import ArticleList from './components/article-list'
 import ChannelEdit from './components/channel-edit'
+import { mapState } from 'vuex'
+import { getItem } from '@/utils/storage'
 export default {
   name: 'HomeIndex',
   data () {
@@ -67,6 +69,9 @@ export default {
       channels: [], // 文章频道
       isChannelEditShow: false // 是否显示弹出层(编辑频道)
     }
+  },
+  computed: {
+    ...mapState(['user'])
   },
   components: {
     ArticleList,
@@ -78,8 +83,24 @@ export default {
   methods: {
     // 获取用户频道列表
     async loadChannels () {
-      const { data } = await getUserChannels()
-      this.channels = data.data.channels
+      let channels = []
+      if (this.user) {
+        // 登录状态,获取后台用户频道
+        const { data } = await getUserChannels()
+        channels = data.data.channels
+      } else {
+        // 未登录,获取本地用户频道
+        const localChannels = getItem('user-channel')
+        // 判断 本地存储有无
+        if (localChannels) {
+          channels = localChannels
+        } else {
+          const { data } = await getUserChannels()
+          channels = data.data.channels
+        }
+      }
+      // 把最终 数据放到 data中
+      this.channels = channels
     }
   }
 }

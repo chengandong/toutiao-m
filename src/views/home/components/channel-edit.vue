@@ -21,7 +21,7 @@
         :icon="(isEdit && index !==0) ? 'close' : ''"
         :key="index"
         :text="channel.name"
-        @click="onUserChannelClick(index)"
+        @click="onUserChannelClick(channel, index)"
       />
     </van-grid>
     <!-- 频道推荐 -->
@@ -43,7 +43,13 @@
 </template>
 
 <script>
-import { getAllChannels } from '@/api/channel'
+import {
+  getAllChannels,
+  addUserChannel,
+  deleteUserChannel
+} from '@/api/channel'
+import { mapState } from 'vuex'
+import { setItem } from '@/utils/storage'
 export default {
   name: 'ChannelEdit',
   data () {
@@ -91,7 +97,8 @@ export default {
       //   }
       // })
       // return arr
-    }
+    },
+    ...mapState(['user'])
   },
   created () {
     this.loadAllChannels()
@@ -102,24 +109,34 @@ export default {
       const { data } = await getAllChannels()
       this.allChannels = data.data.channels
     },
-    onAddChannel (Channel) {
+    async onAddChannel (Channel) {
       this.userChannels.push(Channel)
 
       // 数据持久化
+      if (this.user) {
+        // 登录状态,存储到后台
+        await addUserChannel({
+          channels: [
+            { id: Channel.id, seq: this.userChannels.length }
+          ]
+        })
+      } else {
+        // 没有登录,存储到本地
+        setItem('user-channel', this.userChannels)
+      }
     },
-    // 删除 我的频道 里面的选项
-    onUserChannelClick (index) {
+    onUserChannelClick (channel, index) {
       // 判断 当前编辑按钮 所处状态
       if (this.isEdit && index !== 0) {
         // 删除频道
-        this.deleteChannel(index)
+        this.deleteChannel(channel, index)
       } else {
         // 切换频道
         this.swithChannel(index)
       }
     },
     // 删除频道
-    deleteChannel (index) {
+    async deleteChannel (channel, index) {
       if (index <= this.active) {
         // 更新 激活频道的索引
         this.$emit('edit-active', this.active - 1)
@@ -127,6 +144,11 @@ export default {
       this.userChannels.splice(index, 1)
 
       // 数据持久化
+      if (this.user) {
+        await deleteUserChannel(channel.id)
+      } else {
+        setItem('user-channel', this.userChannels)
+      }
     },
     // 切换频道
     swithChannel (index) {
