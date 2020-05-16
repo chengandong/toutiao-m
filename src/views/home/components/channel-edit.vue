@@ -10,16 +10,18 @@
         round
         size="mini"
         @click="isEdit = !isEdit"
-      >{{isEdit ? '编辑' : '完成'}}</van-button>
+      >{{isEdit ? '完成' : '编辑'}}</van-button>
     </van-cell>
     <van-grid :gutter="10" class="grid-wrap">
       <van-grid-item
         class="grid-item"
+        :class="{active: active === index}"
         v-for="(channel, index) in userChannels"
         center
-        :icon="isEdit ? 'close' : ''"
+        :icon="(isEdit && index !==0) ? 'close' : ''"
         :key="index"
         :text="channel.name"
+        @click="onUserChannelClick(index)"
       />
     </van-grid>
     <!-- 频道推荐 -->
@@ -53,6 +55,10 @@ export default {
   props: {
     userChannels: {
       type: Array,
+      required: true
+    },
+    active: {
+      type: Number,
       required: true
     }
   },
@@ -100,6 +106,33 @@ export default {
       this.userChannels.push(Channel)
 
       // 数据持久化
+    },
+    // 删除 我的频道 里面的选项
+    onUserChannelClick (index) {
+      // 判断 当前编辑按钮 所处状态
+      if (this.isEdit && index !== 0) {
+        // 删除频道
+        this.deleteChannel(index)
+      } else {
+        // 切换频道
+        this.swithChannel(index)
+      }
+    },
+    // 删除频道
+    deleteChannel (index) {
+      if (index <= this.active) {
+        // 更新 激活频道的索引
+        this.$emit('edit-active', this.active - 1)
+      }
+      this.userChannels.splice(index, 1)
+
+      // 数据持久化
+    },
+    // 切换频道
+    swithChannel (index) {
+      // 子传父 数据通信
+      this.$emit('edit-active', index) // 当前我的频道索引
+      this.$emit('popup-close') // 关闭弹出层
     }
   }
 }
@@ -142,6 +175,11 @@ export default {
           font-size: 14px;
         }
       }
+    }
+  }
+  .active {
+    /deep/ .van-grid-item__text {
+      color: red !important;
     }
   }
 }

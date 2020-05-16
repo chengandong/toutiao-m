@@ -47,6 +47,9 @@
       <!-- 频道编辑 子路由出口 -->
       <channel-edit
         :user-channels="channels"
+        :active="active"
+        @edit-active="active = $event"
+        @popup-close="isChannelEditShow = false"
       />
     </van-popup>
   </div>
