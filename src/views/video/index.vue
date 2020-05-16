@@ -1,5 +1,13 @@
 <template>
-  <div class="video-container">视频页面</div>
+  <div class="video-container">
+    <van-nav-bar
+      class="app-nav-bar"
+      title="视频"
+    />
+    <div class="video">
+      敬请期待...
+    </div>
+  </div>
 </template>
 
 <script>
@@ -8,6 +16,12 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped lang="less">
+.video-container {
+  .video {
+    text-align: center;
+    color: #ff6971;
+    margin-top: 20px;
+  }
+}
 </style>

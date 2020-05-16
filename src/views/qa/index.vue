@@ -1,5 +1,13 @@
 <template>
-  <div class="qa-container">问答页面</div>
+  <div class="qa-container">
+    <van-nav-bar
+      class="app-nav-bar"
+      title="问答"
+    />
+    <div class="qa">
+      敬请期待...
+    </div>
+  </div>
 </template>
 
 <script>
@@ -8,6 +16,12 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped lang="less">
+.qa-container {
+  .qa {
+    text-align: center;
+    color: #ff6971;
+    margin-top: 20px;
+  }
+}
 </style>
