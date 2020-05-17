@@ -6,38 +6,56 @@
       finished-text="没有更多了"
       @load="onLoadArticle"
     >
-      <van-cell v-for="item in list" :key="item" :title="item" />
+      <van-cell
+        v-for="(article, index) in articlelist"
+        :key="index"
+        :title="article.title"
+      />
     </van-list>
   </div>
 </template>
 
 <script>
+import { getSearchResults } from '@/api/search'
 export default {
   name: 'SearchResult',
+  props: {
+    searchValue: {
+      type: String,
+      required: true
+    }
+  },
   data () {
     return {
-      list: [],
+      articlelist: [],
       artLoading: false,
-      finished: false
+      finished: false,
+      page: 1, // 页数
+      perPage: 10 // 每页数量
     }
   },
   methods: {
-    onLoadArticle () {
+    async onLoadArticle () {
       // 异步更新数据
-      // setTimeout 仅做示例，真实场景中一般为 ajax 请求
-      setTimeout(() => {
-        for (let i = 0; i < 10; i++) {
-          this.list.push(this.list.length + 1)
-        }
+      const { data } = await getSearchResults({
+        page: this.page, // 页数
+        per_page: this.perPage, // 每页数量
+        q: this.searchValue // 搜索关键词
+      })
 
-        // 加载状态结束
-        this.artLoading = false
+      // 将数据 放到列表中
+      const { results } = data.data
+      this.articlelist.push(...results)
+      // 关闭 loading
+      this.artLoading = false
 
-        // 数据全部加载完成
-        if (this.list.length >= 40) {
-          this.finished = true
-        }
-      }, 1000)
+      // 判断是否 还有数据
+      if (results.length) {
+        // 如果有,获取下一页数据
+        this.page++
+      } else {
+        this.finished = true
+      }
     }
   }
 }

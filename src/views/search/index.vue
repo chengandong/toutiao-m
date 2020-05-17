@@ -7,7 +7,7 @@
         placeholder="请输入搜索关键词"
         show-action
         background="#3296fa"
-        @search="onSearch"
+        @search="onSearch(searchValue)"
         @cancel="$router.back()"
         @focus="isResultShow = false"
       />
@@ -16,12 +16,14 @@
     <!-- 搜索结果 -->
     <SearchResult
       v-if="isResultShow"
+      :search-value="searchValue"
     />
 
     <!-- 联想建议 -->
     <SearchSuggestion
       v-else-if="searchValue"
       :search-value="searchValue"
+      @search="onSearch"
     />
 
     <!-- 搜素历史 -->
@@ -49,7 +51,9 @@ export default {
     }
   },
   methods: {
-    onSearch () {
+    onSearch (searchValue) {
+      // 将搜索框中值设置为 你点击搜素的值
+      this.searchValue = searchValue
       // 显示 搜素结果
       this.isResultShow = true
     }

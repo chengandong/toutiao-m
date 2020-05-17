@@ -4,6 +4,7 @@
       v-for="(suggestion, index) in suggestions"
       :key="index"
       icon="search"
+      @click="$emit('search', suggestion)"
     >
       <div slot="title" v-html="highlight(suggestion)"></div>
     </van-cell>
@@ -46,7 +47,7 @@ export default {
     highlight (suggestion) {
       return suggestion.replace(
         new RegExp(this.searchValue, 'gi'),
-        `<span style="color: red">${this.searchValue}</span>`
+        `<span style="color: #3296fa">${this.searchValue}</span>`
       )
     }
   }
