@@ -9,6 +9,7 @@
         slot="title"
         round
         icon="search"
+        to="/search"
       >搜素</van-button>
     </van-nav-bar>
     <!-- 文章 频道列表 -->

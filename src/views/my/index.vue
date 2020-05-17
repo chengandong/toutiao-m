@@ -122,8 +122,10 @@ export default {
     },
     // 获取用户自己信息
     async loadUserInfo () {
-      const { data } = await getUserInfo()
-      this.userInfo = data.data
+      if (this.user) {
+        const { data } = await getUserInfo()
+        this.userInfo = data.data
+      }
     }
   }
 }
