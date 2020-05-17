@@ -21,6 +21,7 @@
     <!-- 联想建议 -->
     <SearchSuggestion
       v-else-if="searchValue"
+      :search-value="searchValue"
     />
 
     <!-- 搜素历史 -->
