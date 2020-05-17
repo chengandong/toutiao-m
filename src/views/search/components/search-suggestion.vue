@@ -1,12 +1,18 @@
 <template>
   <div class="search-suggestion">
-    <van-cell title="vue" icon="search"></van-cell>
-    <van-cell title="react" icon="search"></van-cell>
+    <van-cell
+      v-for="(suggestion, index) in suggestions"
+      :key="index"
+      icon="search"
+    >
+      <div slot="title" v-html="highlight(suggestion)"></div>
+    </van-cell>
   </div>
 </template>
 
 <script>
-import getSearchSuggestions from '@/api/search'
+import { getSearchSuggestions } from '@/api/search'
+import { debounce } from 'lodash'
 export default {
   name: 'SearchSuggestion',
   props: {
@@ -27,11 +33,21 @@ export default {
     // }
 
     searchValue: {
-      async handler () {
+      // 防抖处理
+      handler: debounce(async function () {
         const { data } = await getSearchSuggestions(this.searchValue)
-        console.log(data)
-      },
+        this.suggestions = data.data.options
+      }, 300),
       immediate: true // 该回调将会在侦听开始之后被立即调用
+    }
+  },
+  methods: {
+    // 使 搜索的 文字高亮显示
+    highlight (suggestion) {
+      return suggestion.replace(
+        new RegExp(this.searchValue, 'gi'),
+        `<span style="color: red">${this.searchValue}</span>`
+      )
     }
   }
 }
