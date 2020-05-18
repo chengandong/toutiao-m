@@ -8,40 +8,54 @@
       @click-left="$router.back()"
     />
     <!-- 作者信息 -->
-    <h1 class="art-title">好累的一天啊，生活好难啊</h1>
+    <h1 class="art-title">{{article.title}}</h1>
     <van-cell :border="false" center class="art-author">
-      <div slot="title" class="author-name">笑傲江湖</div>
-      <div slot="label" class="art-pubdate">令狐冲</div>
+      <div slot="title" class="author-name">{{article.aut_name}}</div>
+      <div slot="label" class="art-pubdate">{{article.pubdate | relativeTime}}</div>
       <van-image
         class="author-avatar"
         slot="icon"
         fit="cover"
         round
-        src="https://img.yzcdn.cn/vant/cat.jpeg"
+        :src="article.aut_photo"
       />
       <van-button
         class="follow-btn"
         slot="right-icon"
-        type="info"
-        icon="plus"
+        :type="article.is_followed ? 'default' : 'info'"
+        :icon="article.is_followed ? '' : 'plus'"
         round
-      >关注
+      >{{article.is_followed ? '已关注' : '关注'}}
       </van-button>
     </van-cell>
-    <div class="markdown-body">
-      啦啦啦
+    <div class="markdown-body" v-html="article.content">
     </div>
   </div>
 </template>
 
 <script>
 import './github-markdown.css'
+import { getArticle } from '@/api/article'
 export default {
   name: 'ArticleIndex',
   props: {
     articleId: {
-      type: String,
+      type: [String, Number, Object],
       required: true
+    }
+  },
+  data () {
+    return {
+      article: {} // 文章数据
+    }
+  },
+  created () {
+    this.loadArticle()
+  },
+  methods: {
+    async loadArticle () {
+      const { data } = await getArticle(this.articleId)
+      this.article = data.data
     }
   }
 }
