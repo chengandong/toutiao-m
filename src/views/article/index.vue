@@ -28,7 +28,12 @@
       >{{article.is_followed ? '已关注' : '关注'}}
       </van-button>
     </van-cell>
-    <div class="markdown-body" v-html="article.content">
+    <!-- 文章内容 -->
+    <div
+      class="markdown-body"
+      v-html="article.content"
+      ref="article-content"
+    >
     </div>
   </div>
 </template>
@@ -36,6 +41,7 @@
 <script>
 import './github-markdown.css'
 import { getArticle } from '@/api/article'
+import { ImagePreview } from 'vant'
 export default {
   name: 'ArticleIndex',
   props: {
@@ -56,6 +62,31 @@ export default {
     async loadArticle () {
       const { data } = await getArticle(this.articleId)
       this.article = data.data
+      // 数据修改后 立即更新DOM
+      this.$nextTick(() => {
+        this.handlePerviewImage()
+      })
+    },
+    handlePerviewImage () {
+      // 获取文章内容DOM 元素
+      const articleContent = this.$refs['article-content']
+      // 获取所有 img图片
+      const imgs = articleContent.querySelectorAll('img')
+
+      // 定义 图片 路径
+      const imgPaths = []
+
+      // 循环遍历 img
+      imgs.forEach((img, index) => {
+        imgPaths.push(img.src)
+        // 为每一张 图片注册点击事件
+        img.onclick = function () {
+          ImagePreview({
+            images: imgPaths, // 需要预览的图片 URL 数组
+            startPosition: index // 图片预览起始位置索引
+          })
+        }
+      })
     }
   }
 }
