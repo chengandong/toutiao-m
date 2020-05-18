@@ -30,6 +30,8 @@
     <SearchHistory
       v-else
       :search-histories="searchHistories"
+      @search="onSearch"
+      @update-histories="searchHistories = $event"
     />
   </div>
 </template>
@@ -43,7 +45,7 @@ import {
   getItem
 } from '@/utils/storage'
 import { mapState } from 'vuex'
-import { getSearchHistories } from '@/api/search'
+// import { getSearchHistories } from '@/api/search'
 export default {
   name: 'SearchIndex',
   components: {
@@ -56,6 +58,12 @@ export default {
       searchValue: '', // 搜索框中的关键字
       isResultShow: false, // 搜索结果状态是否显示
       searchHistories: [] // 搜素历史记录
+    }
+  },
+  watch: {
+    // 监视 data中的 搜素历史记录 数据变化,将其存储到本地
+    searchHistories () {
+      setItem('search-histories', this.searchHistories)
     }
   },
   computed: {
@@ -79,21 +87,22 @@ export default {
       this.searchHistories.unshift(this.searchValue)
 
       // 将搜素历史 记录保存到 本地
-      setItem('search-histories', this.searchHistories)
+      // setItem('search-histories', this.searchHistories)
       // 显示 搜素结果
       this.isResultShow = true
     },
-    async loadSearchHistories () {
-      let searchHistories = getItem('search-histories') || []
-      // 判断 用户是否登录
-      if (this.user) {
-        const { data } = await getSearchHistories()
-        // 数组去重
-        searchHistories = [...new Set([
-          ...searchHistories,
-          ...data.data.keywords
-        ])]
-      }
+    loadSearchHistories () {
+      // let searchHistories = getItem('search-histories') || []
+      // // 判断 用户是否登录
+      // if (this.user) {
+      //   const { data } = await getSearchHistories()
+      //   // 数组去重
+      //   searchHistories = [...new Set([
+      //     ...searchHistories,
+      //     ...data.data.keywords
+      //   ])]
+      // }
+      const searchHistories = getItem('search-histories') || []
       this.searchHistories = searchHistories
     }
   }
