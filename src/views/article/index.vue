@@ -28,10 +28,14 @@
       >关注
       </van-button>
     </van-cell>
+    <div class="markdown-body">
+      啦啦啦
+    </div>
   </div>
 </template>
 
 <script>
+import './github-markdown.css'
 export default {
   name: 'ArticleIndex',
   props: {
@@ -48,7 +52,7 @@ export default {
   .art-title {
     font-size: 20px;
     color: #3a3a3a;
-    padding: 14px;
+    padding: 24px 20px 18px;
     margin: 0;
     background-color: #fff;
   }
@@ -73,6 +77,10 @@ export default {
         font-size: 15px;
       }
     }
+  }
+  .markdown-body {
+    padding: 14px;
+    background-color: #fff;
   }
 }
 </style>
