@@ -1,5 +1,13 @@
 <template>
-  <van-cell class="article-item">
+  <van-cell
+    class="article-item"
+    :to="{
+      name: 'article',
+      params: {
+        articleId:article.art_id
+      }
+    }"
+  >
     <!-- 自定义左侧标题 -->
     <div slot="title" class="title van-multi-ellipsis--l3">{{ article.title }}</div>
     <!-- 自定义标题下方描述 -->
