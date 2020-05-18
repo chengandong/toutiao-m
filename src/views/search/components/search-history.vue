@@ -8,10 +8,11 @@
       </div>
       <!-- <van-icon name="delete" /> -->
     </van-cell>
-    <van-cell title="java">
-      <van-icon name="close" />
-    </van-cell>
-    <van-cell title="php">
+    <van-cell
+      :title="historie"
+      v-for="(historie, index) in searchHistories"
+      :key="index"
+    >
       <van-icon name="close" />
     </van-cell>
   </div>
@@ -19,7 +20,13 @@
 
 <script>
 export default {
-  name: 'SearchHistory'
+  name: 'SearchHistory',
+  props: {
+    searchHistories: {
+      type: Array,
+      required: true
+    }
+  }
 }
 </script>
 
