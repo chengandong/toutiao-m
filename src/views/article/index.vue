@@ -50,7 +50,9 @@
         写评论
       </van-button>
       <van-icon
-         name="good-job-o"
+         :name="article.attitude === 1 ? 'good-job' : 'good-job-o'"
+         :color="article.attitude === 1 ? 'hotpink' : '#777'"
+         @click="onLike"
        />
       <van-icon
         name="comment-o"
@@ -71,7 +73,9 @@ import './github-markdown.css'
 import {
   getArticle,
   addCollect,
-  deleteCollect
+  deleteCollect,
+  addLike,
+  deleteLike
 } from '@/api/article'
 import { ImagePreview } from 'vant'
 import { addFollow, deleteFollow } from '@/api/user'
@@ -129,10 +133,10 @@ export default {
       this.isFollowLoading = true
       // 判断 用户是否被关注
       if (this.article.is_followed) {
-        // 已关注
-        await deleteFollow((this.article.aut_id))
+        // 已关注,取消关注
+        await deleteFollow(this.article.aut_id)
       } else {
-        // 未关注
+        // 未关注,添加关注
         await addFollow(this.article.aut_id)
       }
       this.article.is_followed = !this.article.is_followed
@@ -157,6 +161,26 @@ export default {
       this.article.is_collected = !this.article.is_collected
       // Toast 提示
       this.$toast.success(`${this.article.is_collected ? '收藏成功' : '取消收藏'}`)
+    },
+    // 对文章点赞
+    async onLike () {
+      this.$toast.loading({
+        message: '操作中...',
+        forbidClick: true // 禁用背景点击
+      })
+      if (this.article.attitude === 1) {
+        // 已点赞, 取消点赞
+        await deleteLike(this.articleId)
+        // 更改视图
+        this.article.attitude = -1
+      } else {
+        // 为点赞, 点赞
+        await addLike(this.articleId)
+        // 更改视图
+        this.article.attitude = 1
+      }
+      // Toast 提示
+      this.$toast.success(`${this.article.attitude === 1 ? '点赞成功' : '取消点赞'}`)
     }
   }
 }
