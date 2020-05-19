@@ -42,7 +42,9 @@
       </div>
       <van-divider class="art-end">文章内容结束</van-divider>
       <!-- 文章评论列表 -->
-      <comment-list />
+      <comment-list
+        :source="articleId"
+      />
     </div>
     <!-- 底部区域 -->
     <div class="article-bottom">

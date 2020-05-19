@@ -1,43 +1,61 @@
 <template>
   <div class="comment-list">
+    <van-cell title="全部评论"></van-cell>
     <van-list
-      v-model="loading"
+      v-model="isCommentLoading"
       :finished="finished"
       finished-text="没有更多了"
       @load="onLoad"
     >
-      <van-cell v-for="item in list" :key="item" :title="item" />
+      <van-cell v-for="(comment, index) in commentList" :key="index" :title="comment.content" />
     </van-list>
   </div>
 </template>
 
 <script>
+import { getComments } from '@/api/comment'
 export default {
   name: 'CommentList',
+  props: {
+    // 源id，文章id或评论id
+    source: {
+      type: [Number, String, Object],
+      required: true
+    }
+  },
   data () {
     return {
-      list: [],
-      loading: false,
-      finished: false
+      commentList: [],
+      isCommentLoading: false,
+      finished: false,
+      offset: null, // 获取下一页数据的页码
+      limit: 10 // 每页数量
     }
   },
   methods: {
-    onLoad () {
+    async onLoad () {
       // 异步更新数据
-      // setTimeout 仅做示例，真实场景中一般为 ajax 请求
-      setTimeout(() => {
-        for (let i = 0; i < 10; i++) {
-          this.list.push(this.list.length + 1)
-        }
-
-        // 加载状态结束
-        this.loading = false
-
-        // 数据全部加载完成
-        if (this.list.length >= 40) {
-          this.finished = true
-        }
-      }, 1000)
+      // 获取评论
+      const { data } = await getComments({
+        type: 'a', // 评论类型，a-对文章(article)的评论，c-对评论(comment)的回复
+        source: this.source, // 源id，文章id或评论id
+        offset: this.offset, // 获取评论数据的偏移量，值为评论id，表示从此id的数据向后取，不传表示从第一页开始读取数据
+        limit: this.limit// 获取的评论数据个数，不传表示采用后端服务设定的默认每页数据量
+      })
+      // 解构对象
+      const { results } = data.data
+      // 将数据 放入评论列表中
+      this.commentList.push(...results)
+      // 关闭 加载状态
+      this.isCommentLoading = false
+      // 判断 是否还有数据
+      if (results.length) {
+        // 改变 页码,获取下一页数据
+        this.offset = data.data.last_id
+      } else {
+        // 加载完成
+        this.finished = true
+      }
     }
   }
 }
