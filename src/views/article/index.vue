@@ -57,7 +57,9 @@
         info="123"
        />
        <van-icon
-         name="star-o"
+         :color="article.is_collected ? 'orange' : '#777'"
+         :name="article.is_collected ? 'star' : 'star-o'"
+         @click="onCollect"
        />
        <van-icon name="share" color="#777777"></van-icon>
     </div>
@@ -66,7 +68,11 @@
 
 <script>
 import './github-markdown.css'
-import { getArticle } from '@/api/article'
+import {
+  getArticle,
+  addCollect,
+  deleteCollect
+} from '@/api/article'
 import { ImagePreview } from 'vant'
 import { addFollow, deleteFollow } from '@/api/user'
 export default {
@@ -95,6 +101,7 @@ export default {
         this.handlePerviewImage()
       })
     },
+    // 点击 预览图片
     handlePerviewImage () {
       // 获取文章内容DOM 元素
       const articleContent = this.$refs['article-content']
@@ -116,6 +123,7 @@ export default {
         }
       })
     },
+    // 关注用户
     async onFollow () {
       // 开启loading
       this.isFollowLoading = true
@@ -130,6 +138,25 @@ export default {
       this.article.is_followed = !this.article.is_followed
       // 关闭 loading
       this.isFollowLoading = false
+    },
+    // 收藏文章
+    async onCollect () {
+      this.$toast.loading({
+        message: '操作中...',
+        forbidClick: true // 禁用背景点击
+      })
+      // 判断当前 文章收藏状态
+      if (this.article.is_collected) {
+        // 已收藏,取消收藏
+        await deleteCollect(this.articleId)
+      } else {
+        // 未收藏,添加收藏
+        await addCollect(this.articleId)
+      }
+      // 改变视图
+      this.article.is_collected = !this.article.is_collected
+      // Toast 提示
+      this.$toast.success(`${this.article.is_collected ? '收藏成功' : '取消收藏'}`)
     }
   }
 }
