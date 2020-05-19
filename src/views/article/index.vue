@@ -7,38 +7,43 @@
       left-arrow
       @click-left="$router.back()"
     />
-    <!-- 作者信息 -->
-    <h1 class="art-title">{{article.title}}</h1>
-    <van-cell :border="false" center class="art-author">
-      <div slot="title" class="author-name">{{article.aut_name}}</div>
-      <div slot="label" class="art-pubdate">{{article.pubdate | relativeTime}}</div>
-      <van-image
-        class="author-avatar"
-        slot="icon"
-        fit="cover"
-        round
-        :src="article.aut_photo"
-      />
-      <van-button
-        class="follow-btn"
-        :class="{active:article.is_followed}"
-        slot="right-icon"
-        :type="article.is_followed ? 'default' : 'info'"
-        :icon="article.is_followed ? '' : 'plus'"
-        :loading="isFollowLoading"
-        round
-        @click="onFollow"
-      >{{article.is_followed ? '已关注' : '关注'}}
-      </van-button>
-    </van-cell>
-    <!-- 文章内容 -->
-    <div
-      class="markdown-body"
-      v-html="article.content"
-      ref="article-content"
-    >
+    <!-- 文章信息 -->
+    <div class="article-wrap">
+      <!-- 作者信息 -->
+      <h1 class="art-title">{{article.title}}</h1>
+      <van-cell :border="false" center class="art-author">
+        <div slot="title" class="author-name">{{article.aut_name}}</div>
+        <div slot="label" class="art-pubdate">{{article.pubdate | relativeTime}}</div>
+        <van-image
+          class="author-avatar"
+          slot="icon"
+          fit="cover"
+          round
+          :src="article.aut_photo"
+        />
+        <van-button
+          class="follow-btn"
+          :class="{active:article.is_followed}"
+          slot="right-icon"
+          :type="article.is_followed ? 'default' : 'info'"
+          :icon="article.is_followed ? '' : 'plus'"
+          :loading="isFollowLoading"
+          round
+          @click="onFollow"
+        >{{article.is_followed ? '已关注' : '关注'}}
+        </van-button>
+      </van-cell>
+      <!-- 文章内容 -->
+      <div
+        class="markdown-body"
+        v-html="article.content"
+        ref="article-content"
+      >
+      </div>
+      <van-divider class="art-end">文章内容结束</van-divider>
+      <!-- 文章评论列表 -->
+      <comment-list />
     </div>
-
     <!-- 底部区域 -->
     <div class="article-bottom">
       <van-button
@@ -79,8 +84,12 @@ import {
 } from '@/api/article'
 import { ImagePreview } from 'vant'
 import { addFollow, deleteFollow } from '@/api/user'
+import CommentList from './components/comment-list'
 export default {
   name: 'ArticleIndex',
+  components: {
+    CommentList
+  },
   props: {
     articleId: {
       type: [String, Number, Object],
@@ -142,6 +151,7 @@ export default {
       this.article.is_followed = !this.article.is_followed
       // 关闭 loading
       this.isFollowLoading = false
+      this.$toast.success(`${this.article.is_followed ? '关注成功' : '取消关注'}`)
     },
     // 收藏文章
     async onCollect () {
@@ -188,6 +198,14 @@ export default {
 
 <style scoped lang="less">
 .article-container {
+  .article-wrap {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 46px;
+    bottom: 44px;
+    overflow-y: auto;
+  }
   .art-title {
     font-size: 20px;
     color: #3a3a3a;
@@ -223,7 +241,13 @@ export default {
   }
   .markdown-body {
     padding: 14px;
+    padding-bottom: 20px;
     background-color: #fff;
+  }
+  .art-end {
+    background-color: #fff;
+    margin: 0;
+    padding-bottom: 16px;
   }
   .article-bottom {
     position: fixed;
