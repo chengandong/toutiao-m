@@ -21,10 +21,13 @@
       />
       <van-button
         class="follow-btn"
+        :class="{active:article.is_followed}"
         slot="right-icon"
         :type="article.is_followed ? 'default' : 'info'"
         :icon="article.is_followed ? '' : 'plus'"
+        :loading="isFollowLoading"
         round
+        @click="onFollow"
       >{{article.is_followed ? '已关注' : '关注'}}
       </van-button>
     </van-cell>
@@ -42,6 +45,7 @@
 import './github-markdown.css'
 import { getArticle } from '@/api/article'
 import { ImagePreview } from 'vant'
+import { addFollow, deleteFollow } from '@/api/user'
 export default {
   name: 'ArticleIndex',
   props: {
@@ -52,7 +56,8 @@ export default {
   },
   data () {
     return {
-      article: {} // 文章数据
+      article: {}, // 文章数据
+      isFollowLoading: false // 是否显示为加载状态
     }
   },
   created () {
@@ -87,6 +92,21 @@ export default {
           })
         }
       })
+    },
+    async onFollow () {
+      // 开启loading
+      this.isFollowLoading = true
+      // 判断 用户是否被关注
+      if (this.article.is_followed) {
+        // 已关注
+        await deleteFollow((this.article.aut_id))
+      } else {
+        // 未关注
+        await addFollow(this.article.aut_id)
+      }
+      this.article.is_followed = !this.article.is_followed
+      // 关闭 loading
+      this.isFollowLoading = false
     }
   }
 }
@@ -121,6 +141,10 @@ export default {
       .van-icon-plus {
         font-size: 15px;
       }
+    }
+    .follow-btn.active {
+      color: #fff;
+      background-color: #f85959;
     }
   }
   .markdown-body {
