@@ -38,6 +38,29 @@
       ref="article-content"
     >
     </div>
+
+    <!-- 底部区域 -->
+    <div class="article-bottom">
+      <van-button
+        class="comment-btn"
+        type="default"
+        round
+        size="small"
+      >
+        写评论
+      </van-button>
+      <van-icon
+         name="good-job-o"
+       />
+      <van-icon
+        name="comment-o"
+        info="123"
+       />
+       <van-icon
+         name="star-o"
+       />
+       <van-icon name="share" color="#777777"></van-icon>
+    </div>
   </div>
 </template>
 
@@ -150,6 +173,33 @@ export default {
   .markdown-body {
     padding: 14px;
     background-color: #fff;
+  }
+  .article-bottom {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    height: 44px;
+    border-top: 1px solid #d8d8d8;
+    background-color: #fff;
+    .comment-btn {
+      width: 140px;
+      height: 23px;
+      line-height: 23px;
+      border: 1px solid #eeeeee;
+      color: #a7a7a7;
+      font-size: 14px;
+    }
+    .van-icon {
+      font-size: 20px;
+      .van-info {
+        font-size: 12px;
+        background-color: #e22829;
+      }
+    }
   }
 }
 </style>
