@@ -29,6 +29,7 @@
             class="reply-btn"
             round
             size="size"
+            @click="$emit('reply-click', comment)"
           >回复{{comment.reply_count}}</van-button>
         </div>
       </div>

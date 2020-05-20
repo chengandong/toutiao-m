@@ -46,6 +46,7 @@
         :source="articleId"
         :commentList="commentList"
         @comment-totalCount="commentTotalCount = $event"
+        @reply-click="onReplyClick"
       />
     </div>
     <!-- 底部区域 -->
@@ -87,6 +88,14 @@
         @post-success="onPostSuccess"
       />
     </van-popup>
+
+    <!-- 评论的回复 -->
+    <van-popup
+      v-model="isReplyShow"
+      position="bottom"
+    >
+      <comment-reply />
+    </van-popup>
   </div>
 </template>
 
@@ -103,11 +112,13 @@ import { ImagePreview } from 'vant'
 import { addFollow, deleteFollow } from '@/api/user'
 import CommentList from './components/comment-list'
 import PostComment from './components/post-comment'
+import CommentReply from './components/comment-reply'
 export default {
   name: 'ArticleIndex',
   components: {
     CommentList,
-    PostComment
+    PostComment,
+    CommentReply
   },
   props: {
     articleId: {
@@ -121,7 +132,8 @@ export default {
       isFollowLoading: false, // 是否显示为加载状态
       isPostShow: false, // 是否显示弹出层
       commentList: [], // 文章评论列表
-      commentTotalCount: 0 // 评论总数
+      commentTotalCount: 0, // 评论总数
+      isReplyShow: false // 是否显示弹出层
     }
   },
   created () {
@@ -222,6 +234,10 @@ export default {
       this.commentTotalCount++
       // 关闭 写评论 弹出层
       this.isPostShow = false
+    },
+    onReplyClick () {
+      // 展示 评论回复 内容
+      this.isReplyShow = true
     }
   }
 }
