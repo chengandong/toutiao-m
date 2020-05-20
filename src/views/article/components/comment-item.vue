@@ -30,6 +30,7 @@
             round
             size="size"
             @click="$emit('reply-click', comment)"
+            v-if="isReplyBtnShow"
           >回复{{comment.reply_count}}</van-button>
         </div>
       </div>
@@ -45,6 +46,11 @@ export default {
     comment: {
       type: Object,
       required: true
+    },
+    // 回复 按钮显示状态
+    isReplyBtnShow: {
+      type: Boolean,
+      default: true
     }
   },
   data () {
