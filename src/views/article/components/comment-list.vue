@@ -7,15 +7,25 @@
       finished-text="没有更多了"
       @load="onLoad"
     >
-      <van-cell v-for="(comment, index) in commentList" :key="index" :title="comment.content" />
+      <!-- 文章评论项 子组件 -->
+      <comment-item
+        v-for="(comment, index) in commentList"
+        :key="index"
+        :comment="comment"
+      />
+      <!-- <van-cell v-for="(comment, index) in commentList" :key="index" :title="comment.content" /> -->
     </van-list>
   </div>
 </template>
 
 <script>
 import { getComments } from '@/api/comment'
+import CommentItem from './comment-item'
 export default {
   name: 'CommentList',
+  components: {
+    CommentItem
+  },
   props: {
     // 源id，文章id或评论id
     source: {
