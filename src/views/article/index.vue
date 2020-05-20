@@ -45,6 +45,7 @@
       <comment-list
         :source="articleId"
         :commentList="commentList"
+        @comment-totalCount="commentTotalCount = $event"
       />
     </div>
     <!-- 底部区域 -->
@@ -65,7 +66,7 @@
        />
       <van-icon
         name="comment-o"
-        info="123"
+        :info="commentTotalCount"
        />
        <van-icon
          :color="article.is_collected ? 'orange' : '#777'"
@@ -119,7 +120,8 @@ export default {
       article: {}, // 文章数据
       isFollowLoading: false, // 是否显示为加载状态
       isPostShow: false, // 是否显示弹出层
-      commentList: [] // 文章评论列表
+      commentList: [], // 文章评论列表
+      commentTotalCount: 0 // 评论总数
     }
   },
   created () {
@@ -215,6 +217,9 @@ export default {
     onPostSuccess (comment) {
       // 把 发布评论的数据放到评论列表数据顶部
       this.commentList.unshift(comment)
+
+      // 更新评论的总数量
+      this.commentTotalCount++
       // 关闭 写评论 弹出层
       this.isPostShow = false
     }
