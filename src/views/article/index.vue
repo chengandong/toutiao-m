@@ -44,6 +44,7 @@
       <!-- 文章评论列表 -->
       <comment-list
         :source="articleId"
+        :commentList="commentList"
       />
     </div>
     <!-- 底部区域 -->
@@ -80,7 +81,10 @@
       position="bottom"
     >
       <!-- 子组件 -->
-      <post-comment />
+      <post-comment
+        :target="articleId"
+        @post-success="onPostSuccess"
+      />
     </van-popup>
   </div>
 </template>
@@ -114,7 +118,8 @@ export default {
     return {
       article: {}, // 文章数据
       isFollowLoading: false, // 是否显示为加载状态
-      isPostShow: false // 是否显示弹出层
+      isPostShow: false, // 是否显示弹出层
+      commentList: [] // 文章评论列表
     }
   },
   created () {
@@ -206,6 +211,12 @@ export default {
       }
       // Toast 提示
       this.$toast.success(`${this.article.attitude === 1 ? '点赞成功' : '取消点赞'}`)
+    },
+    onPostSuccess (comment) {
+      // 把 发布评论的数据放到评论列表数据顶部
+      this.commentList.unshift(comment)
+      // 关闭 写评论 弹出层
+      this.isPostShow = false
     }
   }
 }
