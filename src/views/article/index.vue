@@ -94,7 +94,10 @@
       v-model="isReplyShow"
       position="bottom"
     >
-      <comment-reply />
+      <comment-reply
+        :comment="replyComment"
+        @close="isReplyShow = false"
+      />
     </van-popup>
   </div>
 </template>
@@ -133,7 +136,8 @@ export default {
       isPostShow: false, // 是否显示弹出层
       commentList: [], // 文章评论列表
       commentTotalCount: 0, // 评论总数
-      isReplyShow: false // 是否显示弹出层
+      isReplyShow: false, // 是否显示弹出层
+      replyComment: {} // 当前评论回复数据
     }
   },
   created () {
@@ -235,9 +239,10 @@ export default {
       // 关闭 写评论 弹出层
       this.isPostShow = false
     },
-    onReplyClick () {
+    onReplyClick (comment) {
       // 展示 评论回复 内容
       this.isReplyShow = true
+      this.replyComment = comment
     }
   }
 }
