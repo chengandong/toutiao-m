@@ -53,6 +53,7 @@
         type="default"
         round
         size="small"
+        @click="isPostShow = true"
       >
         写评论
       </van-button>
@@ -72,6 +73,15 @@
        />
        <van-icon name="share" color="#777777"></van-icon>
     </div>
+
+    <!-- 写评论 -->
+    <van-popup
+      v-model="isPostShow"
+      position="bottom"
+    >
+      <!-- 子组件 -->
+      <post-comment />
+    </van-popup>
   </div>
 </template>
 
@@ -87,10 +97,12 @@ import {
 import { ImagePreview } from 'vant'
 import { addFollow, deleteFollow } from '@/api/user'
 import CommentList from './components/comment-list'
+import PostComment from './components/post-comment'
 export default {
   name: 'ArticleIndex',
   components: {
-    CommentList
+    CommentList,
+    PostComment
   },
   props: {
     articleId: {
@@ -101,7 +113,8 @@ export default {
   data () {
     return {
       article: {}, // 文章数据
-      isFollowLoading: false // 是否显示为加载状态
+      isFollowLoading: false, // 是否显示为加载状态
+      isPostShow: false // 是否显示弹出层
     }
   },
   created () {
