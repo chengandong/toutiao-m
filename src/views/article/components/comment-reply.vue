@@ -15,15 +15,24 @@
     <comment-item
       :comment="comment"
     />
+    <van-cell :title="`${comment.aut_name}  的评论回复`" />
+    <!-- 分割线 -->
+    <van-divider>已展示所有评论</van-divider>
+    <comment-list
+      :source="comment.com_id"
+      type="c"
+    />
   </div>
 </template>
 
 <script>
 import CommentItem from './comment-item'
+import CommentList from './comment-list'
 export default {
   name: 'CommentReply',
   components: {
-    CommentItem
+    CommentItem,
+    CommentList
   },
   props: {
     comment: {

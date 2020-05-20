@@ -95,6 +95,7 @@
       position="bottom"
     >
       <comment-reply
+        v-if="isReplyShow"
         :comment="replyComment"
         @close="isReplyShow = false"
       />
