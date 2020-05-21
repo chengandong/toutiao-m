@@ -20,6 +20,7 @@
           round
           size="mini"
           class="editBtn"
+          to="/user/profile"
         >编辑资料</van-button>
       </van-cell>
       <!-- 个人 信息 数据栏 -->

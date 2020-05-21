@@ -47,6 +47,11 @@ const routes = [
     name: 'article',
     component: () => import('@/views/article/'),
     props: true // 如果 props 被设置为 true，route.params 将会被设置为组件属性。
+  },
+  {
+    path: '/user/profile',
+    name: 'user-profile',
+    component: () => import('@/views/user-profile/')
   }
 ]
 
