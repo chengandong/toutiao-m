@@ -33,10 +33,11 @@
       position="bottom"
       :style="{ height: '100%' }"
     >
+      <!-- 当传递给子组件的数据既要使用又要修改, 使用 v-model 简写 -->
       <update-name
-        :name="userProfile.name"
+        v-if="isEditNameShow"
+        v-model="userProfile.name"
         @close="isEditNameShow = false"
-        @update-name="userProfile.name = $event"
       />
     </van-popup>
   </div>

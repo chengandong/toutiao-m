@@ -28,14 +28,18 @@ import { updateUserProfile } from '@/api/user'
 export default {
   name: 'UpdateName',
   props: {
-    name: {
+    // name: {
+    //   type: String,
+    //   required: true
+    // }
+    value: {
       type: String,
       required: true
     }
   },
   data () {
     return {
-      nickName: this.name
+      nickName: this.value
     }
   },
   methods: {
@@ -47,19 +51,23 @@ export default {
       try {
         // 修改昵称
         await updateUserProfile({
-          name: this.nickName // 昵称
+          name: this.nickName.trim() // 昵称
         })
 
         // 组件通信-修改父组件里面的昵称
-        this.$emit('update-name', this.nickName)
+        // this.$emit('update-name', this.nickName)
+        this.$emit('input', this.nickName)
         // 关闭弹出层
         this.$emit('close')
 
         // 成功提示
         this.$toast.success('保存成功')
       } catch (err) {
+        console.dir(err)
         if (err && err.response && err.response.status === 409) {
-          this.$toast('昵称已存在,请更换!!!')
+          this.$toast.fail('昵称已存在,请更换!!!')
+        } else if (err && err.response && err.response.status === 400) {
+          this.$toast.fail('昵称必须是1到7个字符!!!')
         }
       }
     }
