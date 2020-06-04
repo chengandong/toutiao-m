@@ -7,7 +7,14 @@
       left-arrow
       @click-left="$router.back()"
     />
-    <van-cell is-link center title="头像">
+    <input
+      type="file"
+      hidden
+      ref="file"
+      accept="image/*"
+      @change="onFileChange"
+    />
+    <van-cell is-link center title="头像" @click="$refs.file.click()">
       <van-image
         width="36"
         height="36"
@@ -75,6 +82,21 @@
         @close="isEditBirthdayShow = false"
       />
     </van-popup>
+    <!-- 头像 弹出层 -->
+    <van-popup
+      class="update-photo-popup"
+      v-model="isEditPhotoShow"
+      round
+      position="bottom"
+      style="height: 100%"
+    >
+      <update-photo
+        v-if="isEditPhotoShow"
+        :file="previewImage"
+        @update-photo="userProfile.photo = $event"
+        @close="isEditPhotoShow = false"
+      />
+    </van-popup>
   </div>
 </template>
 
@@ -83,19 +105,23 @@ import { getUserProfile } from '@/api/user'
 import UpdateName from './components/update-name'
 import UpdateGender from './components/update-gender'
 import UpdateBirthday from './components/update-birthday'
+import UpdatePhoto from './components/update-photo'
 export default {
   name: 'UserProfile',
   components: {
     UpdateName,
     UpdateGender,
-    UpdateBirthday
+    UpdateBirthday,
+    UpdatePhoto
   },
   data () {
     return {
       userProfile: {}, // 用户个人信息数据
       isEditNameShow: false, // 是否显示编辑昵称弹出层
       isEditGenderShow: false, // 是否显示编辑性别弹出层
-      isEditBirthdayShow: false // 是否显示编辑生日弹出层
+      isEditBirthdayShow: false, // 是否显示编辑生日弹出层
+      isEditPhotoShow: false, // 是否显示编辑头像弹出层
+      previewImage: null // 上传预览图片数据
     }
   },
   created () {
@@ -105,6 +131,19 @@ export default {
     async loadUserProfile () {
       const { data } = await getUserProfile()
       this.userProfile = data.data
+    },
+
+    onFileChange () {
+      // 预览图片
+      const file = this.$refs.file.files[0]
+
+      this.previewImage = file
+
+      // 展示弹出层
+      this.isEditPhotoShow = true
+
+      // 解决相同 文件不触发 该事件
+      this.$refs.file.value = ''
     }
   }
 }
@@ -113,5 +152,11 @@ export default {
 <style scoped lang="less">
 .van-popup {
   background-color: #f5f7f9;
+}
+.update-photo-popup {
+  background-color: #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>
