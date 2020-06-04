@@ -79,7 +79,12 @@
     </van-grid>
     <!-- 页面导航 -->
     <van-cell title="消息通知" is-link to="/" class="message" />
-    <van-cell title="小程同学" is-link to="/" class="mb-5 smartXC" />
+    <van-cell
+      title="小程同学"
+      is-link
+      to="/user/chat"
+      class="mb-5 smartXC"
+    />
     <van-cell
       v-if="user"
       title="退出登录"
