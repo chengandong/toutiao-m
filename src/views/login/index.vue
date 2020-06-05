@@ -110,6 +110,9 @@ export default {
         this.$toast.success('登录成功')
         // 将 登录状态 数据 放到 Vuex容器中
         this.$store.commit('setUser', res.data.data)
+
+        // 清除 LayoutIndex 页面缓冲, 让其重新加载
+        this.$store.commit('removeCachePage', 'LayoutIndex')
         // 跳转 到原来 页面
         this.$router.back()
       } catch (err) {
