@@ -10,7 +10,10 @@
     <!-- 消息列表 -->
     <van-cell-group class="messageList" ref="message-list">
       <van-cell
-        class="message-item"
+        :class="{
+          'message-item-even': index % 2 === 0,
+          'message-item-odd': !index % 2 === 0
+        }"
         :border="false"
         v-for="(message, index) in messageList"
         :key="index"
@@ -19,10 +22,10 @@
           :slot="index % 2 === 0 ? 'default' : 'title'"
           width="40"
           height="40"
-          :src=" index % 2 === 0 ? 'http://toutiao.meiduo.site/FqHn7ps9v5I8esWXJNKH0asrSwcB' : 'http://toutiao.meiduo.site/FlOAkWHoU8lnYwU6eCEPN-dHINHl'"
+          :src=" index % 2 === 0 ? 'http://toutiao.meiduo.site/FlOAkWHoU8lnYwU6eCEPN-dHINHl' : 'http://toutiao.meiduo.site/FqHn7ps9v5I8esWXJNKH0asrSwcB'"
         />
-        <div class="msg-wrap" :slot="index % 2 === 0 ? 'title' : 'default'">
-          <span class="title">{{message.msg}}</span>
+        <div class="title" :slot="index % 2 === 0 ? 'title' : 'default'">
+          {{message.msg}}
         </div>
       </van-cell>
     </van-cell-group>
@@ -119,17 +122,49 @@ export default {
     background-color: #f5f5f6;
   }
 }
-.message-item {
+.message-item-odd {
   display: flex;
   align-items: center;
-  .msg-wrap {
+  .van-cell__title {
+    flex: unset;
+    margin-right: 5px;
+  }
+  .van-cell__value {
     flex: 1;
     .title {
+      display: table;
       background: #e0effb;
+      border-radius: 5px;
       padding: 10px;
+      font-size: 12px;
+      color: #222222;
     }
   }
 }
+
+.message-item-even {
+  display: flex;
+  align-items: center;
+  .van-cell__title {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+    .title {
+      display: table;
+      background: #e0effb;
+      border-radius: 10px;
+      padding: 10px;
+      font-size: 12px;
+      text-align: right;
+      color: #222222;
+    }
+  }
+  .van-cell__value {
+    flex: unset;
+    margin-left: 5px;
+  }
+}
+
 .sendMessage-wrap {
   position: fixed;
   left: 0;
