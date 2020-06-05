@@ -7,6 +7,14 @@ import JSONbig from 'json-bigint'
 // 加载 store
 import store from '@/store/'
 
+import { Toast } from 'vant'
+
+import router from '@/router/'
+
+const requestRefreshToken = axios.create({
+  baseURL: 'http://ttapi.research.itcast.cn'
+})
+
 const request = axios.create({
   baseURL: 'http://ttapi.research.itcast.cn', // 基准地址
   transformResponse: [function (data) {
@@ -41,5 +49,57 @@ request.interceptors.request.use(function (config) {
   // Do something with request error
   return Promise.reject(error)
 })
+
+// 响应 拦截器
+request.interceptors.response.use(function (response) {
+  // Any status code that lie within the range of 2xx cause this function to trigger
+  // Do something with response data
+  // 响应成功
+  return response
+}, async function (error) {
+  // Any status codes that falls outside the range of 2xx cause this function to trigger
+  // Do something with response error
+  // 响应失败, 超过 2xx 的状态码都会进入这
+
+  const status = error.response.status
+
+  if (status === 400) {
+    Toast.fail('客户端请求参数异常!')
+  } else if (status === 401) {
+    // token 无效
+    const { user } = store.state
+    // 如果没有 user 或者没有 user.token, 便先去登录
+    if (!user || !user.token) {
+      return redirectLogin()
+    }
+    try {
+      const { data } = await requestRefreshToken({
+        method: 'PUT',
+        url: '/app/v1_0/authorizations',
+        headers: {
+          Authorization: `Bearer ${user.refresh_token}`
+        }
+      })
+
+      // 将新 token 保存到 容器
+      user.token = data.data.token
+      store.commit('setUser', user)
+
+      // 把 失败的请求 重新 发出去
+      return request(error.config)
+    } catch (err) {
+      redirectLogin()
+    }
+  } else if (status === 403) {
+    Toast.fail('没有权限操作')
+  } else if (status >= 500) {
+    Toast.fail('服务端异常，请稍后重试')
+  }
+  return Promise.reject(error)
+})
+
+function redirectLogin () {
+  router.replace('/login')
+}
 
 export default request
