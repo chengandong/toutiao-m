@@ -57,7 +57,12 @@
     </van-cell-group>
     <!-- 未登录 -->
     <div class="no-login" v-else>
-      <div @click="$router.push('/login')">
+      <div @click="$router.push({
+        name: 'login',
+        query: {
+          redirect: '/my'
+        }
+      })">
         <img class="cellphone" src="./cellphone.png">
       </div>
       <div class="text">登录 / 注册</div>

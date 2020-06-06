@@ -114,7 +114,8 @@ export default {
         // 清除 LayoutIndex 页面缓冲, 让其重新加载
         this.$store.commit('removeCachePage', 'LayoutIndex')
         // 跳转 到原来 页面
-        this.$router.back()
+        // this.$router.back()  有问题
+        this.$router.push(this.$route.query.redirect || '/')
       } catch (err) {
         console.log('登录失败', err)
         this.$toast.fail('登录失败,手机号或验证码错误')

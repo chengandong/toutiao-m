@@ -99,7 +99,13 @@ request.interceptors.response.use(function (response) {
 })
 
 function redirectLogin () {
-  router.replace('/login')
+  router.replace({
+    name: 'login',
+    // 查询参数 记录跳转前的当前路由
+    query: {
+      redirect: router.currentRoute.fullPath
+    }
+  })
 }
 
 export default request
