@@ -34,7 +34,6 @@
         v-for="(Channel, inndex) in recommendChannels"
         :key="inndex"
         center
-        icon="plus"
         :text="Channel.name"
         @click="onAddChannel(Channel)"
       />
