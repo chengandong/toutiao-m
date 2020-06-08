@@ -1,6 +1,7 @@
 <template>
   <div class="article-container">
     <!-- 导航栏 -->
+    <div>啦啦啦</div>
     <van-nav-bar
       class="app-nav-bar"
       title="文章详情"
