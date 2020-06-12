@@ -8,14 +8,19 @@
       @click-left="$router.back()"
     />
     <!-- 用户信息 -->
+    <user-info :user="user" />
     <!-- 文章列表 -->
   </div>
 </template>
 
 <script>
 import { getUserById } from '@/api/user'
+import UserInfo from './components/user-info'
 export default {
   name: 'UserIndex',
+  components: {
+    UserInfo
+  },
   props: {
     userId: {
       type: [String, Number, Object],
@@ -24,7 +29,9 @@ export default {
   },
   data () {
     return {
-      user: null // 用户信息数据
+      user: {
+        id: this.userId
+      } // 用户信息数据
     }
   },
   created () {
