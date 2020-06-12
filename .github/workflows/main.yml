@@ -12,7 +12,7 @@ jobs:
     steps:
     # 下载仓库代码
     - uses: actions/checkout@v2
-
+    
     # 缓存依赖
     - name: Get yarn cache
       id: yarn-cache
@@ -26,14 +26,14 @@ jobs:
     
     # 安装依赖
     - run: yarn
-
+    
     # 打包构建
     - run: yarn build
-
+    
     # 发布到 GitHub Pages
     - name: Deploy
       uses: peaceiris/actions-gh-pages@v2
       env:
         PERSONAL_TOKEN: ${{ secrets.ACCESS_TOKEN }} # 访问秘钥
         PUBLISH_BRANCH: gh-pages # 推送分支
-        PUBLISH_DIR: ./dist # 部署目录 
+        PUBLISH_DIR: ./dist # 部署目录

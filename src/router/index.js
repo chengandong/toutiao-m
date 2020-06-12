@@ -70,6 +70,14 @@ const routes = [
     name: 'user-chat',
     component: () => import('@/views/user-chat/'),
     meta: { requiresAuth: true }
+  },
+  // 用户主页
+  {
+    path: '/user/:userId',
+    name: 'user',
+    component: () => import('@/views/user/'),
+    props: true,
+    meta: { requiresAuth: false }
   }
 ]
 

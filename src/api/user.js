@@ -84,3 +84,11 @@ export const updateUserPhoto = data => {
     data
   })
 }
+
+// 获取指定用户信息
+export const getUserById = (userId) => {
+  return request({
+    method: 'GET',
+    url: `/app/v1_0/users/${userId}`
+  })
+}

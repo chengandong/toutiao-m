@@ -13,8 +13,23 @@
           round
           fit="cover"
           :src="userInfo.photo"
+          @click="$router.push({
+            name: 'user',
+            params: {
+              userId: userInfo.id
+            }
+          })"
         />
-        <div slot="title" class="user-nickName">{{userInfo.name}}</div>
+        <div
+          slot="title"
+          class="user-nickName"
+          @click="$router.push({
+            name: 'user',
+            params: {
+              userId: userInfo.id
+            }
+          })"
+        >{{userInfo.name}}</div>
         <van-button
           type="default"
           round
