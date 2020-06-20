@@ -50,13 +50,13 @@
             <div class="text">头条</div>
           </div>
         </van-grid-item>
-        <van-grid-item class="data-info-item">
+        <van-grid-item class="data-info-item" :to="`/user/${userInfo.id}/follow`">
           <div slot="text" class="text-wrap">
             <div class="count">{{userInfo.follow_count}}</div>
             <div class="text">关注</div>
           </div>
         </van-grid-item>
-        <van-grid-item class="data-info-item">
+        <van-grid-item class="data-info-item" :to="`/user/${userInfo.id}/follow`">
           <div slot="text" class="text-wrap">
             <div class="count">{{userInfo.fans_count}}</div>
             <div class="text">粉丝</div>
