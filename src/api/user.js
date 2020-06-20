@@ -92,3 +92,27 @@ export const getUserById = (userId) => {
     url: `/app/v1_0/users/${userId}`
   })
 }
+
+// 获取用户的关注列表
+export const getFollowingsById = (userId, params) => {
+  return request({
+    method: 'GET',
+    url: '/app/v1_0/user/followings',
+    data: {
+      target: userId // 关注目标(被关注的用户id)
+    },
+    params
+  })
+}
+
+// 获取用户的粉丝列表
+export const getfollowersById = (userId, params) => {
+  return request({
+    method: 'GET',
+    url: '/app/v1_0/user/followers',
+    data: {
+      target: userId // 关注目标(被关注的用户id)
+    },
+    params
+  })
+}
